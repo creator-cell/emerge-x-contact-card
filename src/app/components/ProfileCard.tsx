@@ -1,19 +1,21 @@
 "use client";
 import Image from "next/image";
-import profile from "../../../public/profile.png";
 import facebook from "../../../public/facebook.png";
 import instagram from "../../../public/instagram.png";
 import linkedin from "../../../public/linkdin.png";
-import logo from "../../../public/logo.png";
+import logo from "../../../public/logo.svg";
 import contact from "../../../public/contact.png";
 import share from "../../../public/share.png";
 import twitter from "../../../public/twitter.png";
 import globe from "../../../public/globe.png";
-import arrow from "../../../public/arrow.png";
 import whatsapp from "../../../public/whatsapp.png";
 import { FaPhoneAlt, FaEnvelope } from "react-icons/fa";
 import Link from "next/link";
 import { useMemo } from "react";
+import { StripeBg } from '@/app/components/StripeBg'
+import { IoCallOutline } from "react-icons/io5";
+import { AiOutlineShareAlt } from "react-icons/ai";
+import { MdOutlineMail } from "react-icons/md";
 
 
 
@@ -48,133 +50,98 @@ const ProfileCard = ({ data }: { data: any }) => {
     ];
   }, [data]);
 
-  return (
-    <div className="min-h-screen bg-black text-white flex items-center justify-center p-5">
-      <div className="bg-black rounded-xl shadow-lg w-[1000px] max-w-6xl grid grid-cols-1 md:grid-cols-3 p-10 relative border text-center">
-        <div className="absolute top-6 w-full flex md:justify-end justify-center">
-          <Image
-            src={logo}
-            alt="Logo"
-            width={140}
-            height={140}
-            className="min-[768px]:w-[200px] min-[768px]:mr-7 "
-          />
-        </div>
+  return <div className="flex w-full bg-black h-screen max-h-screen overflow-auto justify-center items-center p-4">
 
-        {/* Profile Image (always centered) */}
-        <div className="flex flex-col items-center justify-center col-span-1 mt-10 md:-mt-35">
-          <img
-            src={data?.photo}
-            alt={data?.name}
-            width={220}
-            height={220}
-            className="min-[768px]:w-[300px]"
-          />
-        </div>
+    <div className="max-w-4xl relative w-full rounded-xl bg-[#080a08] shadow-2xl p-2 md:p-6 m-auto">
+      <Image
+        src={logo}
+        alt="Logo"
+        className="absolute w-28 md:w-44 right-4 top-2 z-20"
+      />
 
-        {/* Info Section */}
-        <div className="flex flex-col col-span-2 justify-center items-center mt-4 md:ml-10">
-          <div className="flex items-center justify-between w-full">
-            <div className="flex min-[768px]:hidden"></div>
-            <div className="text-center md:text-left ml-0 md:mb-4 md:mt-4">
-              <h2 className="text-2xl min-[500px]:text-3xl capitalize font-bold mb-3 ml-14 md:ml-0">
-                {data?.name}
-              </h2>
-              <p className="text-lg min-[500px]:text-xl text-gray-300 mb-3 ml-14 md:ml-0">
-                {data?.position}
-              </p>
-            </div>
-
-            {/* Contact image only visible < 770px */}
-            <div className="min-[770px]:hidden">
-              <Image
-                src={contact}
-                width={50}
-                height={50}
-                alt="contact"
-                className="rounded-full"
+      <div className="">
+        <div className="flex flex-col md:flex-row justify-between">
+          <div className="w-full md:w-[30%]">
+            <div className="bg-[url(/stripes.svg)] flex justify-center items-center h-80 md:h-96 w-full bg-center  bg-no-repeat bg-contain">
+              <img
+                src={data?.photo}
+                alt={data?.name}
+                className="w-40 md:w-60"
               />
             </div>
+
           </div>
 
-          {/* Call & Email Side by Side for all screen sizes */}
-          <div className="flex flex-row justify-between gap-0.5 min-[500px]:gap-4 w-full">
-            {/* Call */}
-            <div className="flex flex-col md:items-start justify-start flex-1 min-w-[180px]">
+          <div className="w-full md:w-[70%] p-4 md:p-10 relative space-y-6">
 
-              <p className="text-sm min-[500px]:text-xl font-medium mb-2">
-                +971 {data?.contactNumber}
-              </p>
-              <div className="flex items-center justify-center gap-2">
-                <Link href={`tel:+971${data?.contactNumber}`}>
-                  <button className="flex items-center justify-center bg-black px-3 py-1 min-[500px]:px-6 min-[500px]:py-2 rounded-full gap-2 border border-white text-xs min-[500px]:text-sm">
-                    <FaPhoneAlt className="w-3 h-3 min-[500px]:w-4 min-[500px]:h-4" />{" "}
-                    Call
-                  </button>
-                </Link>
-                <Image
-                  src={share}
-                  width={24}
-                  height={24}
-                  alt="share"
-                  className="rounded-full min-[500px]:w-[35px] min-[500px]:h-[35px]"
-                />
-              </div>
+            <img src="/contact.png" className="absolute w-10 md:w-16 z-20 right-1 md:right-2 top-16 md:top-[75%] -translate-y-1/2" />
+
+            <div className="absolute inset-0 h-full z-0 pointer-events-none 
+  bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)] 
+  bg-[size:80px_80px] 
+  bg-[position:40px_0]" />
+
+            <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full blur-3xl opacity-70 pointer-events-none bg-[radial-gradient(ellipse_at_top,_#132a0e,_#010101)] z-0" />
+            <div className="space-y-2 text-center md:text-left relative z-20">
+              <h1 className="text-2xl lg:text-3xl font-[900]">{data?.name}</h1>
+              <p className="text-md font-[400]">{data?.position}</p>
             </div>
 
-            {/* Email */}
-            <div className="flex flex-col md:items-start justify-start flex-1 min-w-[180px]">
-              <p className="text-sm min-[500px]:text-xl font-medium mb-2">
-                {data?.email}
-              </p>
-              <div className="flex items-center justify-center gap-2">
-                <Link href={`mailto:${data?.email}`} >
-                  <button className="flex items-center justify-center cursor-pointer bg-black px-3 py-1 min-[500px]:px-6 min-[500px]:py-2 rounded-full gap-2 border border-white text-xs min-[500px]:text-sm">
-                    <FaEnvelope className="w-3 h-3 min-[500px]:w-4 min-[500px]:h-4" />{" "}
-                    Email
-                  </button>
-                </Link>
-                <Image
-                  src={share}
-                  width={24}
-                  height={24}
-                  alt="share"
-                  className="rounded-full min-[500px]:w-[35px] min-[500px]:h-[35px]"
-                />
-              </div>
-            </div>
-          </div>
+            <div className="flex flex-nowrap relative gap-4 justify-center md:justify-evenly z-20 text-md">
+              <div className="w-1/2 space-y-3">
+                <p className="text-nowrap text-sm md:text-md">+971 {data?.contactNumber}</p>
 
-          {/* Map and Contact */}
-          <div className="flex flex-col md:flex-row items-center justify-center gap-4 mt-4 mb-12 w-full">
-            <div className="w-full md:w-[500px] md:text-left">
-              <p className="text-sm min-[500px]:text-xl font-medium mb-2">
-                Office Location
-              </p>
+                <div className="flex items-center  gap-4">
+
+                  <Link href={`tel:${data?.contactNumber}`}>
+                    <button className="text-sm flex items-center cursor-pointer justify-center gap-2 px-4 py-1 border rounded-full">
+                      <IoCallOutline className="text-sm md:text-lg" />
+                      Call
+                    </button>
+                  </Link>
+
+                  <div className="border rounded-full p-1">
+                    <AiOutlineShareAlt className="text-lg" />
+                  </div>
+
+                </div>
+              </div>
+              <div className="w-1/2 space-y-3">
+                <p className="text-nowrap text-sm md:text-md"> {data?.email}</p>
+
+                <div className="flex items-center gap-4">
+
+                  <Link href={`mailto:${data?.email}`}>
+                    <button className="text-sm flex items-center cursor-pointer justify-center gap-2 px-4 py-1 border rounded-full">
+                      <MdOutlineMail className="text-sm md:text-lg" />
+                      Email
+                    </button>
+                  </Link>
+
+                  <div className="border rounded-full p-1">
+                    <AiOutlineShareAlt className="text-lg" />
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+
+            <div className="space-y-3 z-20 relative ">
+              <p className="text-md text-center md:text-left">Office Location</p>
               <iframe
-                src={`https://www.google.com/maps/embed/v1/place?key=YOUR_GOOGLE_MAPS_API_KEY&q=${encodeURIComponent(data?.location)}`}
-                width="100%"
-                height="200"
-                className="rounded-4xl border border-green-500"
+                src={`https://www.google.com/maps/embed/v1/place?key=${process.env.GOOGLE_API_KEY}&q=${encodeURIComponent(data?.location)}`}
+                className="w-full h-[150px] md:h-[200px] md:w-[90%] rounded-2xl aspect-video"
                 loading="lazy"
                 allowFullScreen
               ></iframe>
+
             </div>
 
-            <div className="justify-center items-center h-[200px] hidden min-[770px]:flex">
-              <Image
-                src={contact}
-                width={80}
-                height={80}
-                alt="contact"
-                className="rounded-full"
-              />
-            </div>
           </div>
         </div>
 
-        <div className="absolute bottom-1 left-0 w-full  flex  items-center justify-between p-3 mt-4">
-
+        <div className="flex items-center my-2 justify-evenly z-20">
           {socialLinks?.map(
             ({ link, icon }: { link: string; icon: any }, i) => (
               <Link key={i} href={link}>
@@ -185,8 +152,13 @@ const ProfileCard = ({ data }: { data: any }) => {
         </div>
       </div>
     </div>
-  )
+
+  </div>
+
+
 }
+
+
 
 
 
