@@ -3,7 +3,7 @@ import Image from "next/image";
 import profile from "../../../public/profile.png";
 import facebook from "../../../public/facebook.png";
 import instagram from "../../../public/instagram.png";
-import linkdin from "../../../public/linkdin.png";
+import linkedin from "../../../public/linkdin.png";
 import logo from "../../../public/logo.png";
 import contact from "../../../public/contact.png";
 import share from "../../../public/share.png";
@@ -12,8 +12,42 @@ import globe from "../../../public/globe.png";
 import arrow from "../../../public/arrow.png";
 import whatsapp from "../../../public/whatsapp.png";
 import { FaPhoneAlt, FaEnvelope } from "react-icons/fa";
+import Link from "next/link";
+import { useMemo } from "react";
 
-const ProfileCard = () => {
+
+
+const ProfileCard = ({ data }: { data: any }) => {
+
+  const socialLinks = useMemo(() => {
+    return [
+      {
+        link: data?.facebookLink,
+        icon: facebook
+      },
+      {
+        link: data?.instagramLink,
+        icon: instagram
+      },
+      {
+        link: data?.linkedinLink,
+        icon: linkedin
+      },
+      {
+        link: data?.websiteLink,
+        icon: globe
+      },
+      {
+        link: data?.twitterLink,
+        icon: twitter
+      },
+      {
+        link: `https://wa.me/${data?.whatsappNumber}`,
+        icon: whatsapp
+      }
+    ];
+  }, [data]);
+
   return (
     <div className="min-h-screen bg-black text-white flex items-center justify-center p-5">
       <div className="bg-black rounded-xl shadow-lg w-[1000px] max-w-6xl grid grid-cols-1 md:grid-cols-3 p-10 relative border text-center">
@@ -28,10 +62,10 @@ const ProfileCard = () => {
         </div>
 
         {/* Profile Image (always centered) */}
-        <div className="flex flex-col items-center justify-center col-span-1 md:-mt-35">
-          <Image
-            src={profile}
-            alt="Vibin Baby"
+        <div className="flex flex-col items-center justify-center col-span-1 mt-10 md:-mt-35">
+          <img
+            src={data?.photo}
+            alt={data?.name}
             width={220}
             height={220}
             className="min-[768px]:w-[300px]"
@@ -43,15 +77,15 @@ const ProfileCard = () => {
           <div className="flex items-center justify-between w-full">
             <div className="flex min-[768px]:hidden"></div>
             <div className="text-center md:text-left ml-0 md:mb-4 md:mt-4">
-              <h2 className="text-2xl min-[500px]:text-3xl font-bold mb-3 ml-14 md:ml-0">
-                Vibin Baby
+              <h2 className="text-2xl min-[500px]:text-3xl capitalize font-bold mb-3 ml-14 md:ml-0">
+                {data?.name}
               </h2>
               <p className="text-lg min-[500px]:text-xl text-gray-300 mb-3 ml-14 md:ml-0">
-                Chief Technical Officer
+                {data?.position}
               </p>
             </div>
 
-              {/* Contact image only visible < 770px */}
+            {/* Contact image only visible < 770px */}
             <div className="min-[770px]:hidden">
               <Image
                 src={contact}
@@ -69,13 +103,15 @@ const ProfileCard = () => {
             <div className="flex flex-col md:items-start justify-start flex-1 min-w-[180px]">
 
               <p className="text-sm min-[500px]:text-xl font-medium mb-2">
-                +971 50 106 0525
+                +971 {data?.contactNumber}
               </p>
               <div className="flex items-center justify-center gap-2">
-                <button className="flex items-center justify-center bg-black px-3 py-1 min-[500px]:px-6 min-[500px]:py-2 rounded-full gap-2 border border-white text-xs min-[500px]:text-sm">
-                  <FaPhoneAlt className="w-3 h-3 min-[500px]:w-4 min-[500px]:h-4" />{" "}
-                  Call
-                </button>
+                <Link href={`tel:+971${data?.contactNumber}`}>
+                  <button className="flex items-center justify-center bg-black px-3 py-1 min-[500px]:px-6 min-[500px]:py-2 rounded-full gap-2 border border-white text-xs min-[500px]:text-sm">
+                    <FaPhoneAlt className="w-3 h-3 min-[500px]:w-4 min-[500px]:h-4" />{" "}
+                    Call
+                  </button>
+                </Link>
                 <Image
                   src={share}
                   width={24}
@@ -89,13 +125,15 @@ const ProfileCard = () => {
             {/* Email */}
             <div className="flex flex-col md:items-start justify-start flex-1 min-w-[180px]">
               <p className="text-sm min-[500px]:text-xl font-medium mb-2">
-                vibin@emergex.com
+                {data?.email}
               </p>
               <div className="flex items-center justify-center gap-2">
-                <button className="flex items-center justify-center bg-black px-3 py-1 min-[500px]:px-6 min-[500px]:py-2 rounded-full gap-2 border border-white text-xs min-[500px]:text-sm">
-                  <FaEnvelope className="w-3 h-3 min-[500px]:w-4 min-[500px]:h-4" />{" "}
-                  Email
-                </button>
+                <Link href={`mailto:${data?.email}`} >
+                  <button className="flex items-center justify-center cursor-pointer bg-black px-3 py-1 min-[500px]:px-6 min-[500px]:py-2 rounded-full gap-2 border border-white text-xs min-[500px]:text-sm">
+                    <FaEnvelope className="w-3 h-3 min-[500px]:w-4 min-[500px]:h-4" />{" "}
+                    Email
+                  </button>
+                </Link>
                 <Image
                   src={share}
                   width={24}
@@ -114,7 +152,7 @@ const ProfileCard = () => {
                 Office Location
               </p>
               <iframe
-                src="https://www.google.com/maps/embed?pb=..."
+                src={`https://www.google.com/maps/embed/v1/place?key=YOUR_GOOGLE_MAPS_API_KEY&q=${encodeURIComponent(data?.location)}`}
                 width="100%"
                 height="200"
                 className="rounded-4xl border border-green-500"
@@ -136,15 +174,20 @@ const ProfileCard = () => {
         </div>
 
         <div className="absolute bottom-1 left-0 w-full  flex  items-center justify-between p-3 mt-4">
-          {[globe, facebook, whatsapp, instagram, linkdin, twitter, share].map(
-            (icon, i) => (
-              <Image key={i} src={icon} width={25} height={25} alt="social"  className="min-[768px]:w-[35px] min-[35px]:mr-5 "/>
+
+          {socialLinks?.map(
+            ({ link, icon }: { link: string; icon: any }, i) => (
+              <Link key={i} href={link}>
+                <Image src={icon} width={25} height={25} alt="social" className="min-[768px]:w-[35px] min-[35px]:mr-5 " />
+              </Link>
             )
           )}
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
+
+
 
 export default ProfileCard;
