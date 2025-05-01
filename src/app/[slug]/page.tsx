@@ -1,21 +1,26 @@
+// src/app/[slug]/page.tsx
+
 import ProfileCard from '../components/ProfileCard';
 
-const home = async (props: any) => {
+interface PageProps {
+  params: {
+    slug: string;
+  };
+}
 
-  const { slug } = await props?.params;
+const Page = async ({ params }: PageProps) => {
+  const { slug } = params;
 
   if (!slug) {
-    return
+    return null;
   }
 
   const response = await fetch(`${process.env.SERVER}/contactCard/contact/${slug}`);
   const data = await response.json();
 
-  if (!data) return
+  if (!data) return null;
 
   return <ProfileCard data={data?.contactCard} />;
-}
+};
 
-
-export default home
-
+export default Page;
