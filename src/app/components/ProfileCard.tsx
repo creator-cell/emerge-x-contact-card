@@ -7,6 +7,7 @@ import logo from "../../../public/logo.svg";
 import twitter from "../../../public/twitter.png";
 import globe from "../../../public/globe.png";
 import whatsapp from "../../../public/whatsapp.png";
+import share from '../../../public/share.png'
 import Link from "next/link";
 import { useMemo } from "react";
 import { IoCallOutline } from "react-icons/io5";
@@ -24,12 +25,12 @@ export interface IContactCard {
   contactNumber: string;
   email: string;
   location: string;
-  facebookLink: string;
-  instagramLink: string;
-  twitterLink: string;
-  linkedinLink: string;
   websiteLink: string;
+  facebookLink: string;
   whatsappNumber: string;
+  instagramLink: string;
+  linkedinLink: string;
+  twitterLink: string;
   createdAt?: string; // From timestamps
   updatedAt?: string; // From timestamps
 }
@@ -39,8 +40,16 @@ const ProfileCard = ({ data }: { data: IContactCard }) => {
   const socialLinks = useMemo(() => {
     return [
       {
+        link: data?.websiteLink,
+        icon: globe
+      },
+      {
         link: data?.facebookLink,
         icon: facebook
+      },
+      {
+        link: `https://wa.me/${data?.whatsappNumber}`,
+        icon: whatsapp
       },
       {
         link: data?.instagramLink,
@@ -50,22 +59,57 @@ const ProfileCard = ({ data }: { data: IContactCard }) => {
         link: data?.linkedinLink,
         icon: linkedin
       },
-      {
-        link: data?.websiteLink,
-        icon: globe
-      },
+      
       {
         link: data?.twitterLink,
         icon: twitter
       },
-      {
-        link: `https://wa.me/${data?.whatsappNumber}`,
-        icon: whatsapp
-      }
+      
     ];
   }, [data]);
 
-  return <div className="flex w-full bg-black h-screen max-h-screen overflow-auto justify-center items-center p-4">
+  const handleShare = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: document.title,
+        text: 'Check out this page!',
+        url: window.location.href,
+      }).catch((err) => console.error('Error sharing:', err));
+    } else {
+      navigator.clipboard.writeText(window.location.href)
+        .then(() => alert('Link copied to clipboard!'))
+        .catch(() => alert('Failed to copy link'));
+    }
+  };
+
+  const handleDownloadContact = (contact: IContactCard) => {
+    const vCardData = `
+    BEGIN:VCARD
+    VERSION:3.0
+    N:${contact.name}
+    FN:${contact.name}
+    TITLE:${contact.position}
+    TEL;TYPE=work,voice:${contact.contactNumber}
+    EMAIL;TYPE=internet:${contact.email}
+    URL:${contact.websiteLink}
+    ADR;TYPE=work:${contact.location}
+    END:VCARD
+      `.trim();
+    
+      const blob = new Blob([vCardData], { type: 'text/vcard;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+    
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${contact.name.replace(/\s+/g, '_')}.vcf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    
+      URL.revokeObjectURL(url);
+  };
+  
+  return <div className="flex w-full bg-white h-screen max-h-screen overflow-auto justify-center items-center p-4">
 
     <div className="max-w-4xl relative w-full rounded-xl bg-[#080a08] shadow-2xl p-2 md:p-6 m-auto">
       <Image
@@ -81,7 +125,7 @@ const ProfileCard = ({ data }: { data: IContactCard }) => {
               <Image
                 src={data?.photo}
                 alt={data?.name}
-                width={25} height={25}
+                width={100} height={100}
                 className="w-40 md:w-60"
               />
             </div>
@@ -90,12 +134,12 @@ const ProfileCard = ({ data }: { data: IContactCard }) => {
 
           <div className="w-full md:w-[70%] p-4 md:p-10 relative space-y-6">
 
-            <Image src="/contact.png" width={25} height={25} alt="" className="absolute w-10 md:w-16 z-20 right-1 md:right-2 top-16 md:top-[75%] -translate-y-1/2" />
+            <Image src="/contact.png" width={100} height={100} alt="" className="absolute w-10 md:w-16 z-20 right-1 md:right-2 top-16 md:top-[75%] -translate-y-1/2" onClick={() => handleDownloadContact(data)}/>
 
             <div className="absolute inset-0 h-full z-0 pointer-events-none 
-  bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)] 
-  bg-[size:80px_80px] 
-  bg-[position:40px_0]" />
+              bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)] 
+              bg-[size:80px_80px] 
+              bg-[position:40px_0]" />
 
             <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full blur-3xl opacity-70 pointer-events-none bg-[radial-gradient(ellipse_at_top,_#132a0e,_#010101)] z-0" />
             <div className="space-y-2 text-center md:text-left relative z-20">
@@ -146,26 +190,40 @@ const ProfileCard = ({ data }: { data: IContactCard }) => {
             <div className="space-y-3 z-20 relative ">
               <p className="text-md text-center md:text-left">Office Location</p>
               <iframe
-                src={`https://www.google.com/maps/embed/v1/place?key=${process.env.GOOGLE_API_KEY}&q=${encodeURIComponent(data?.location)}`}
-                className="w-full h-[150px] md:h-[200px] md:w-[90%] rounded-2xl aspect-video"
-                loading="lazy"
-                allowFullScreen
-              ></iframe>
-
+              src={`https://www.google.com/maps/embed/v1/place?key=${process.env.GOOGLE_API_KEY}&q=25.1555673,55.2976126`}
+              className="w-full h-[150px] md:h-[200px] md:w-[90%] rounded-2xl aspect-video"
+              loading="lazy"
+              allowFullScreen
+            ></iframe>
             </div>
 
           </div>
         </div>
 
-        <div className="flex items-center my-2 justify-evenly z-20">
+        <div className="flex items-center justify-between w-full my-2 z-20">
           {socialLinks?.map(
             ({ link, icon }: { link: string; icon: StaticImageData }, i) => (
-              <Link key={i} href={link}>
-                <Image src={icon} width={25} height={25} alt="social" className="min-[768px]:w-[35px] min-[35px]:mr-5 " />
+              <Link key={i} href={link} target="_blank" rel="noopener noreferrer">
+                <Image
+                  src={icon}
+                  alt="social"
+                  width={100}
+                  height={100}
+                  className="w-[35px] h-[35px] object-contain hover:scale-110 transition-transform"
+                />
               </Link>
             )
           )}
+          <Image
+            src={share}
+            alt="share"
+            width={100}
+            height={100}
+            className="w-[35px] h-[35px] object-contain hover:scale-110 transition-transform cursor-pointer"
+            onClick={handleShare}
+          />
         </div>
+       
       </div>
     </div>
 
