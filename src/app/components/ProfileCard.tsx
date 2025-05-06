@@ -121,17 +121,7 @@ const ProfileCard = ({ data }: { data: IContactCard }) => {
 
       <div className="">
         <div className="flex flex-col md:flex-row justify-between">
-          {/* <div className="w-full md:w-[30%]">
-            <div className="bg-[url(/stripes.svg)] flex justify-center items-center h-80 md:h-96 w-full bg-center  bg-no-repeat bg-contain">
-              <Image
-                src={data?.photo}
-                alt={data?.name}
-                width={100} height={100}
-                className="w-40 md:w-60"
-              />
-            </div>
 
-          </div> */}
           <div className="w-full md:w-[30%]">
             <div className="relative flex justify-center items-center h-80 md:h-96 w-full">
 
@@ -140,14 +130,14 @@ const ProfileCard = ({ data }: { data: IContactCard }) => {
 
               {/* Photo on top */}
               <div className="relative z-10 w-24 md:w-40">
-                  <Image
-                    src={data?.photo}
-                    alt={data?.name}
-                    width={300}
-                    height={400}
-                    className="w-full h-auto object-contain"
-                  />
-                </div>
+                <Image
+                  src={data?.photo}
+                  alt={data?.name}
+                  width={300}
+                  height={400}
+                  className="w-full h-auto object-contain"
+                />
+              </div>
 
             </div>
           </div>
@@ -155,7 +145,7 @@ const ProfileCard = ({ data }: { data: IContactCard }) => {
 
           <div className="w-full md:w-[70%] p-4 md:p-10 relative space-y-6">
 
-            <Image src="/contact.png" width={100} height={100} alt="" className="absolute w-10 md:w-16 z-28 right-1 md:right-2 top-16 md:top-[75%] -translate-y-1/2" onClick={() => handleDownloadContact(data)} />
+            <Image src="/contact.png" width={100} height={100} alt="" className="absolute w-10 cursor-pointer md:w-16 z-28 right-1 md:right-2 top-16 md:top-[75%] -translate-y-1/2" onClick={() => handleDownloadContact(data)} />
 
             <div className="absolute inset-0 h-full z-0 pointer-events-none 
               bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)] 
