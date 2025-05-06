@@ -81,7 +81,7 @@ const ProfileCard = ({ data }: { data: IContactCard }) => {
         .catch(() => alert('Failed to copy link'));
     }
   };
-
+  console.log(process.env.GOOGLE_API_KEY)
   const handleDownloadContact = (contact: IContactCard) => {
     const vCardData = `
     BEGIN:VCARD
@@ -134,7 +134,7 @@ const ProfileCard = ({ data }: { data: IContactCard }) => {
 
           <div className="w-full md:w-[70%] p-4 md:p-10 relative space-y-6">
 
-            <Image src="/contact.png" width={100} height={100} alt="" className="absolute w-10 md:w-16 z-20 right-1 md:right-2 top-16 md:top-[75%] -translate-y-1/2" onClick={() => handleDownloadContact(data)}/>
+            <Image src="/contact.png" width={100} height={100} alt="" className="absolute w-10 md:w-16 z-28 right-1 md:right-2 top-16 md:top-[75%] -translate-y-1/2" onClick={() => handleDownloadContact(data)}/>
 
             <div className="absolute inset-0 h-full z-0 pointer-events-none 
               bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)] 
@@ -143,13 +143,13 @@ const ProfileCard = ({ data }: { data: IContactCard }) => {
 
             <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full blur-3xl opacity-70 pointer-events-none bg-[radial-gradient(ellipse_at_top,_#132a0e,_#010101)] z-0" />
             <div className="space-y-2 text-center md:text-left relative z-20">
-              <h1 className="text-2xl lg:text-3xl font-[900]">{data?.name}</h1>
-              <p className="text-md font-[400]">{data?.position}</p>
+              <h1 className="text-2xl lg:text-3xl font-[900] text-white">{data?.name}</h1>
+              <p className="text-md font-[400] text-white">{data?.position}</p>
             </div>
 
             <div className="flex flex-nowrap relative gap-4 justify-center md:justify-evenly z-20 text-md">
               <div className="w-1/2 space-y-3">
-                <p className="text-nowrap text-sm md:text-md">+971 {data?.contactNumber}</p>
+                <p className="text-nowrap text-sm md:text-md text-white">+971 {data?.contactNumber}</p>
 
                 <div className="flex items-center  gap-4">
 
@@ -167,7 +167,7 @@ const ProfileCard = ({ data }: { data: IContactCard }) => {
                 </div>
               </div>
               <div className="w-1/2 space-y-3">
-                <p className="text-nowrap text-sm md:text-md"> {data?.email}</p>
+                <p className="text-nowrap text-sm md:text-md text-white"> {data?.email}</p>
 
                 <div className="flex items-center gap-4">
 
@@ -186,11 +186,11 @@ const ProfileCard = ({ data }: { data: IContactCard }) => {
               </div>
 
             </div>
-
             <div className="space-y-3 z-20 relative ">
-              <p className="text-md text-center md:text-left">Office Location</p>
+              <p className="text-md text-center md:text-left text-white">Office Location</p>
+              
               <iframe
-              src={`https://www.google.com/maps/embed/v1/place?key=${process.env.GOOGLE_API_KEY}&q=25.1555673,55.2976126`}
+              src={`https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2727.368442998152!2d55.30018750000001!3d25.1555625!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f69270f5612c3%3A0x2d7e43041843e7d8!2sMeydan%20Free%20Zone!5e1!3m2!1sen!2sin!4v1746466938990!5m2!1sen!2sin`}
               className="w-full h-[150px] md:h-[200px] md:w-[90%] rounded-2xl aspect-video"
               loading="lazy"
               allowFullScreen
@@ -200,7 +200,7 @@ const ProfileCard = ({ data }: { data: IContactCard }) => {
           </div>
         </div>
 
-        <div className="flex items-center justify-between w-full my-2 z-20">
+        <div className="flex items-center justify-between w-full my-2 z-20 text-white">
           {socialLinks?.map(
             ({ link, icon }: { link: string; icon: StaticImageData }, i) => (
               <Link key={i} href={link} target="_blank" rel="noopener noreferrer">
@@ -209,7 +209,7 @@ const ProfileCard = ({ data }: { data: IContactCard }) => {
                   alt="social"
                   width={100}
                   height={100}
-                  className="w-[35px] h-[35px] object-contain hover:scale-110 transition-transform"
+                  className="w-[35px] h-[35px] object-contain hover:scale-110 transition-transform text-white"
                 />
               </Link>
             )
@@ -219,7 +219,7 @@ const ProfileCard = ({ data }: { data: IContactCard }) => {
             alt="share"
             width={100}
             height={100}
-            className="w-[35px] h-[35px] object-contain hover:scale-110 transition-transform cursor-pointer"
+            className="w-[35px] h-[35px] object-contain hover:scale-110 transition-transform cursor-pointer text-white"
             onClick={handleShare}
           />
         </div>
