@@ -121,7 +121,7 @@ const ProfileCard = ({ data }: { data: IContactCard }) => {
 
       <div className="">
         <div className="flex flex-col md:flex-row justify-between">
-          <div className="w-full md:w-[30%]">
+          {/* <div className="w-full md:w-[30%]">
             <div className="bg-[url(/stripes.svg)] flex justify-center items-center h-80 md:h-96 w-full bg-center  bg-no-repeat bg-contain">
               <Image
                 src={data?.photo}
@@ -131,7 +131,27 @@ const ProfileCard = ({ data }: { data: IContactCard }) => {
               />
             </div>
 
+          </div> */}
+          <div className="w-full md:w-[30%]">
+            <div className="relative flex justify-center items-center h-80 md:h-96 w-full">
+
+              {/* Stripes background */}
+              <div className="absolute inset-0 bg-[url(/stripes.svg)] bg-center bg-no-repeat bg-contain z-0" />
+
+              {/* Photo on top */}
+              <div className="relative z-10 w-24 md:w-40">
+                  <Image
+                    src={data?.photo}
+                    alt={data?.name}
+                    width={300}
+                    height={400}
+                    className="w-full h-auto object-contain"
+                  />
+                </div>
+
+            </div>
           </div>
+
 
           <div className="w-full md:w-[70%] p-4 md:p-10 relative space-y-6">
 
