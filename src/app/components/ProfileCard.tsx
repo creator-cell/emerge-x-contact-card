@@ -110,9 +110,9 @@ const ProfileCard = ({ data }: { data: IContactCard }) => {
     URL.revokeObjectURL(url);
   };
 
-  return <div className="flex w-full bg-white h-screen max-h-screen overflow-hidden justify-center items-center p-4">
+  return <div className="flex w-full bg-white h-screen max-h-screen overflow-y-auto overflow-x-hidden justify-center items-center p-4">
 
-    <div className="max-w-4xl h-[calc(100dvh-32px)] md:h-auto overflow-y-auto overflow-x-hidden relative w-full rounded-xl bg-[#080a08] shadow-2xl p-2 md:p-6 m-auto">
+    <div className="max-w-4xl relative w-full rounded-xl bg-[#080a08] shadow-2xl p-2 md:p-6 m-auto">
       <Image
         src={logo}
         alt="Logo"
