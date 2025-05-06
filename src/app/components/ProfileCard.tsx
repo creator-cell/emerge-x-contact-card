@@ -59,12 +59,12 @@ const ProfileCard = ({ data }: { data: IContactCard }) => {
         link: data?.linkedinLink,
         icon: linkedin
       },
-      
+
       {
         link: data?.twitterLink,
         icon: twitter
       },
-      
+
     ];
   }, [data]);
 
@@ -81,7 +81,8 @@ const ProfileCard = ({ data }: { data: IContactCard }) => {
         .catch(() => alert('Failed to copy link'));
     }
   };
-  console.log(process.env.GOOGLE_API_KEY)
+
+
   const handleDownloadContact = (contact: IContactCard) => {
     const vCardData = `
     BEGIN:VCARD
@@ -95,23 +96,23 @@ const ProfileCard = ({ data }: { data: IContactCard }) => {
     ADR;TYPE=work:${contact.location}
     END:VCARD
       `.trim();
-    
-      const blob = new Blob([vCardData], { type: 'text/vcard;charset=utf-8' });
-      const url = URL.createObjectURL(blob);
-    
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `${contact.name.replace(/\s+/g, '_')}.vcf`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    
-      URL.revokeObjectURL(url);
-  };
-  
-  return <div className="flex w-full bg-white h-screen max-h-screen overflow-auto justify-center items-center p-4">
 
-    <div className="max-w-4xl relative w-full rounded-xl bg-[#080a08] shadow-2xl p-2 md:p-6 m-auto">
+    const blob = new Blob([vCardData], { type: 'text/vcard;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${contact.name.replace(/\s+/g, '_')}.vcf`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    URL.revokeObjectURL(url);
+  };
+
+  return <div className="flex w-full bg-white h-screen max-h-screen overflow-hidden justify-center items-center p-4">
+
+    <div className="max-w-4xl h-[calc(100dvh-32px)] md:h-auto overflow-y-auto overflow-x-hidden relative w-full rounded-xl bg-[#080a08] shadow-2xl p-2 md:p-6 m-auto">
       <Image
         src={logo}
         alt="Logo"
@@ -134,7 +135,7 @@ const ProfileCard = ({ data }: { data: IContactCard }) => {
 
           <div className="w-full md:w-[70%] p-4 md:p-10 relative space-y-6">
 
-            <Image src="/contact.png" width={100} height={100} alt="" className="absolute w-10 md:w-16 z-28 right-1 md:right-2 top-16 md:top-[75%] -translate-y-1/2" onClick={() => handleDownloadContact(data)}/>
+            <Image src="/contact.png" width={100} height={100} alt="" className="absolute w-10 md:w-16 z-28 right-1 md:right-2 top-16 md:top-[75%] -translate-y-1/2" onClick={() => handleDownloadContact(data)} />
 
             <div className="absolute inset-0 h-full z-0 pointer-events-none 
               bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)] 
@@ -188,19 +189,19 @@ const ProfileCard = ({ data }: { data: IContactCard }) => {
             </div>
             <div className="space-y-3 z-20 relative ">
               <p className="text-md text-center md:text-left text-white">Office Location</p>
-              
+
               <iframe
-              src={`https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2727.368442998152!2d55.30018750000001!3d25.1555625!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f69270f5612c3%3A0x2d7e43041843e7d8!2sMeydan%20Free%20Zone!5e1!3m2!1sen!2sin!4v1746466938990!5m2!1sen!2sin`}
-              className="w-full h-[150px] md:h-[200px] md:w-[90%] rounded-2xl aspect-video"
-              loading="lazy"
-              allowFullScreen
-            ></iframe>
+                src={`https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2727.368442998152!2d55.30018750000001!3d25.1555625!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f69270f5612c3%3A0x2d7e43041843e7d8!2sMeydan%20Free%20Zone!5e1!3m2!1sen!2sin!4v1746466938990!5m2!1sen!2sin`}
+                className="w-full h-[150px] md:h-[200px] md:w-[90%] rounded-2xl aspect-video"
+                loading="lazy"
+                allowFullScreen
+              ></iframe>
             </div>
 
           </div>
         </div>
 
-        <div className="flex items-center justify-between w-full my-2 z-20 text-white">
+        <div className="flex items-center justify-between px-2 w-full my-2 z-20 text-white">
           {socialLinks?.map(
             ({ link, icon }: { link: string; icon: StaticImageData }, i) => (
               <Link key={i} href={link} target="_blank" rel="noopener noreferrer">
@@ -209,7 +210,7 @@ const ProfileCard = ({ data }: { data: IContactCard }) => {
                   alt="social"
                   width={100}
                   height={100}
-                  className="w-[35px] h-[35px] object-contain hover:scale-110 transition-transform text-white"
+                  className="w-6 h-6 md:w-[35px] md:h-[35px] object-contain hover:scale-110 transition-transform text-white"
                 />
               </Link>
             )
@@ -219,11 +220,11 @@ const ProfileCard = ({ data }: { data: IContactCard }) => {
             alt="share"
             width={100}
             height={100}
-            className="w-[35px] h-[35px] object-contain hover:scale-110 transition-transform cursor-pointer text-white"
+            className="w-6 h-6 md:w-[35px] md:h-[35px] object-contain hover:scale-110 transition-transform cursor-pointer text-white"
             onClick={handleShare}
           />
         </div>
-       
+
       </div>
     </div>
 
