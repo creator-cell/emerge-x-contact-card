@@ -168,7 +168,7 @@ const ProfileCard = ({ data }: { data: IContactCard }) => {
         />
 
         <div className="">
-          <div className="flex flex-col md:flex-row overflow-hidden justify-between">
+          <div className="flex flex-col md:flex-row overflow-hidden md:pt-6 justify-between">
             <div className="w-full md:w-[30%]">
               <div className="relative flex justify-center items-center h-80 md:h-96 w-full">
                 {/* Stripes background */}
