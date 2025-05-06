@@ -1,13 +1,13 @@
 "use client";
 import Image from "next/image";
-import facebook from "../../../public/facebook.png";
-import instagram from "../../../public/instagram.png";
-import linkedin from "../../../public/linkdin.png";
+import facebook from "../../../public/fb.svg"; //fixed
+import instagram from "../../../public/insta.svg"; 
+import linkedin from "../../../public/linkedin.svg"; //fixed
 import logo from "../../../public/logo.svg";
-import twitter from "../../../public/twitter.png";
-import globe from "../../../public/globe.png";
-import whatsapp from "../../../public/whatsapp.png";
-import share from '../../../public/share.png'
+import twitter from "../../../public/twitter.svg"; //fixed
+import globe from "../../../public/globe.svg"; //Fixed
+import whatsapp from "../../../public/whatsapp.svg"; //Fixed
+import share from '../../../public/share.svg'
 import Link from "next/link";
 import { useMemo } from "react";
 import { IoCallOutline } from "react-icons/io5";
@@ -47,6 +47,7 @@ const ProfileCard = ({ data }: { data: IContactCard }) => {
         link: data?.facebookLink,
         icon: facebook
       },
+     
       {
         link: `https://wa.me/${data?.whatsappNumber}`,
         icon: whatsapp
@@ -59,7 +60,6 @@ const ProfileCard = ({ data }: { data: IContactCard }) => {
         link: data?.linkedinLink,
         icon: linkedin
       },
-
       {
         link: data?.twitterLink,
         icon: twitter
@@ -81,7 +81,57 @@ const ProfileCard = ({ data }: { data: IContactCard }) => {
         .catch(() => alert('Failed to copy link'));
     }
   };
-
+  function formatInternationalNumber(rawNumber) {
+    // Remove all spaces, dashes, parentheses etc.
+    const cleaned = rawNumber.replace(/[\s()-]/g, '');
+  
+    // Match + followed by country code (1 to 3 digits) and the rest
+    const match = cleaned.match(/^\+(\d{1,3})(\d+)$/);
+    if (!match) {
+      return rawNumber; // Return original if pattern invalid
+    }
+  
+    const countryCode = match[1]; // e.g. '971' or '91'
+    let numberPart = match[2];  // Rest of number
+  
+    // UAE (+971)
+    if (countryCode === '971') {
+      if (numberPart.startsWith('0')) {
+        numberPart = numberPart.substring(1);
+      }
+  
+      if (numberPart.length !== 9) {
+        return rawNumber; // Invalid length, fallback
+      }
+  
+      const prefix = numberPart.substring(0, 2);
+      const part1 = numberPart.substring(2, 5);
+      const part2 = numberPart.substring(5);
+  
+      return `+971 ${prefix} ${part1} ${part2}`;
+    }
+  
+    // India (+91)
+    if (countryCode === '91') {
+      if (numberPart.startsWith('0')) {
+        numberPart = numberPart.substring(1);
+      }
+  
+      if (numberPart.length !== 10) {
+        return rawNumber; // Invalid length, fallback
+      }
+  
+      const part1 = numberPart.substring(0, 5);
+      const part2 = numberPart.substring(5);
+  
+      return `+91 ${part1} ${part2}`;
+    }
+  
+    // Fallback for other countries — just space after country code
+    return `+${countryCode} ${numberPart}`;
+  }
+  
+  
 
   const handleDownloadContact = (contact: IContactCard) => {
     const vCardData = `
@@ -148,7 +198,7 @@ const ProfileCard = ({ data }: { data: IContactCard }) => {
             <Image src="/contact.png" width={100} height={100} alt="" className="absolute w-10 cursor-pointer md:w-16 z-28 right-1 md:right-2 top-16 md:top-[75%] -translate-y-1/2" onClick={() => handleDownloadContact(data)} />
 
             <div className="absolute inset-0 h-full z-0 pointer-events-none 
-              bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)] 
+            bg-[linear-gradient(to_right,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.03)_1px,transparent_1px)]
               bg-[size:80px_80px] 
               bg-[position:40px_0]" />
 
@@ -160,19 +210,21 @@ const ProfileCard = ({ data }: { data: IContactCard }) => {
 
             <div className="flex flex-nowrap relative gap-4 justify-center md:justify-evenly z-20 text-md">
               <div className="w-1/2 space-y-3">
-                <p className="text-nowrap text-sm md:text-md text-white">+971 {data?.contactNumber}</p>
+              <p className="text-nowrap text-sm md:text-md text-white">
+                {formatInternationalNumber(data?.contactNumber)}
+              </p>
 
                 <div className="flex items-center  gap-4">
 
                   <Link href={`tel:${data?.contactNumber}`}>
-                    <button className="text-sm flex items-center cursor-pointer justify-center gap-2 px-4 py-1 border rounded-full">
-                      <IoCallOutline className="text-sm md:text-lg" />
+                    <button className="text-sm flex items-center cursor-pointer justify-center gap-2 px-4 py-1 border rounded-full text-white">
+                      <IoCallOutline className="text-sm md:text-lg text-white" />
                       Call
                     </button>
                   </Link>
 
-                  <div className="border rounded-full p-1">
-                    <AiOutlineShareAlt className="text-lg" />
+                  <div className="border rounded-full p-1 text-white">
+                    <AiOutlineShareAlt className="text-lg text-white" />
                   </div>
 
                 </div>
@@ -183,14 +235,14 @@ const ProfileCard = ({ data }: { data: IContactCard }) => {
                 <div className="flex items-center gap-4">
 
                   <Link href={`mailto:${data?.email}`}>
-                    <button className="text-sm flex items-center cursor-pointer justify-center gap-2 px-4 py-1 border rounded-full">
-                      <MdOutlineMail className="text-sm md:text-lg" />
+                    <button className="text-sm flex items-center cursor-pointer justify-center gap-2 px-4 py-1 border rounded-full text-white">
+                      <MdOutlineMail className="text-sm md:text-lg text-white" />
                       Email
                     </button>
                   </Link>
 
-                  <div className="border rounded-full p-1">
-                    <AiOutlineShareAlt className="text-lg" />
+                  <div className="border rounded-full p-1 text-white">
+                    <AiOutlineShareAlt className="text-lg text-white" />
                   </div>
 
                 </div>
