@@ -81,7 +81,7 @@ const ProfileCard = ({ data }: { data: IContactCard }) => {
         .catch(() => alert('Failed to copy link'));
     }
   };
-  function formatInternationalNumber(rawNumber) {
+  function formatInternationalNumber(rawNumber: string): string {
     // Remove all spaces, dashes, parentheses etc.
     const cleaned = rawNumber.replace(/[\s()-]/g, '');
   
@@ -108,7 +108,7 @@ const ProfileCard = ({ data }: { data: IContactCard }) => {
       const part1 = numberPart.substring(2, 5);
       const part2 = numberPart.substring(5);
   
-      return `+971 ${prefix} ${part1} ${part2}`;
+      return '+971 ' + prefix + ' ' + part1 + ' ' + part2;
     }
   
     // India (+91)
@@ -124,13 +124,14 @@ const ProfileCard = ({ data }: { data: IContactCard }) => {
       const part1 = numberPart.substring(0, 5);
       const part2 = numberPart.substring(5);
   
-      return `+91 ${part1} ${part2}`;
+      return '+91 ' + part1 + ' ' + part2;
     }
   
     // Fallback for other countries — just space after country code
-    return `+${countryCode} ${numberPart}`;
+    return '+' + countryCode + ' ' + numberPart;
   }
   
+
   
 
   const handleDownloadContact = (contact: IContactCard) => {
