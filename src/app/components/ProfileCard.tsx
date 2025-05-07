@@ -35,6 +35,7 @@ export interface IContactCard {
 }
 
 const ProfileCard = ({ data }: { data: IContactCard }) => {
+  console.log('data --', data)
   const socialLinks = useMemo(() => {
     return [
       {
@@ -130,33 +131,85 @@ const ProfileCard = ({ data }: { data: IContactCard }) => {
     // Fallback for other countries — just space after country code
     return "+" + countryCode + " " + numberPart;
   }
-
-  const handleDownloadContact = (contact: IContactCard) => {
-    const vCardData = `
-    BEGIN:VCARD
-    VERSION:3.0
-    N:${contact.name}
-    FN:${contact.name}
-    TITLE:${contact.position}
-    TEL;TYPE=work,voice:${contact.contactNumber}
-    EMAIL;TYPE=internet:${contact.email}
-    URL:${contact.websiteLink}
-    ADR;TYPE=work:${contact.location}
-    END:VCARD
-      `.trim();
-
+  const handleDownloadContact = async (contact: IContactCard) => {
+    const [firstName, ...rest] = contact.name.trim().split(" ");
+    const lastName = rest.join(" ");
+  
+    const formatPhoneNumber = (num: string) => {
+      const cleaned = num.replace(/[^\d]/g, '');
+      if (cleaned.startsWith('971') || cleaned.startsWith('91') || cleaned.startsWith('+')) {
+        return cleaned.startsWith('+') ? cleaned : `+${cleaned}`;
+      }
+      return `+971${cleaned}`;
+    };
+  
+    const workPhone = formatPhoneNumber(contact.contactNumber);
+    const whatsapp = contact.whatsappNumber ? formatPhoneNumber(contact.whatsappNumber) : "";
+  
+    // Fetch photo and convert to base64
+    const fetchPhotoAsBase64 = async (url: string): Promise<string | null> => {
+      try {
+        const response = await fetch(url);
+        const blob = await response.blob();
+        const fileType = blob.type.split("/")[1].toUpperCase(); // e.g. JPEG or PNG
+  
+        return new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            const base64data = (reader.result as string).split(",")[1]; // Strip "data:image/...;base64,"
+            resolve(`PHOTO;ENCODING=b;TYPE=${fileType}:${base64data}`);
+          };
+          reader.readAsDataURL(blob);
+        });
+      } catch (err) {
+        console.error("Failed to fetch photo", err);
+        return null;
+      }
+    };
+  
+    const photoLine = await fetchPhotoAsBase64(contact.photo);
+  
+    let vCardLines = [
+      "BEGIN:VCARD",
+      "VERSION:3.0",
+      `N:${lastName};${firstName};;;`,
+      `FN:${contact.name}`,
+      `TITLE:${contact.position}`,
+      `TEL;TYPE=WORK,VOICE:${workPhone}`,
+    ];
+  
+    if (whatsapp && whatsapp !== workPhone) {
+      vCardLines.push(`TEL;TYPE=CELL,WhatsApp:${whatsapp}`);
+    }
+  
+    vCardLines.push(
+      `EMAIL;TYPE=INTERNET:${contact.email}`,
+      `URL:${contact.websiteLink}`,
+      `NOTE:Office Location - ${contact.location}`
+    );
+  
+    if (photoLine) {
+      vCardLines.push(photoLine);
+    }
+  
+    vCardLines.push("END:VCARD", "");
+  
+    const vCardData = vCardLines.join('\r\n'); // CRLF
+  
     const blob = new Blob([vCardData], { type: "text/vcard;charset=utf-8" });
     const url = URL.createObjectURL(blob);
-
+  
     const link = document.createElement("a");
     link.href = url;
     link.download = `${contact.name.replace(/\s+/g, "_")}.vcf`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-
+  
     URL.revokeObjectURL(url);
   };
+  
+  
 
   return (
     <div className="flex w-full relative bg-white h-screen max-h-screen overflow-y-auto overflow-x-hidden justify-center items-center p-4">
