@@ -169,7 +169,7 @@ const ProfileCard = ({ data }: { data: IContactCard }) => {
   
     const photoLine = await fetchPhotoAsBase64(contact.photo);
   
-    let vCardLines = [
+    const vCardLines = [
       "BEGIN:VCARD",
       "VERSION:3.0",
       `N:${lastName};${firstName};;;`,
