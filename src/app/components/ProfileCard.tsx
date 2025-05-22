@@ -164,7 +164,7 @@ const ProfileCard = ({ data }: { data: IContactCard }) => {
     URL.revokeObjectURL(url);
   };
 
-  const handleShareContacts = async ({ title, text }) => {
+  const handleShareContacts = async ({ title, text }: { title: string; text: string }) => {
     try {
       if (navigator.share) {
         await navigator.share({ title, text });
