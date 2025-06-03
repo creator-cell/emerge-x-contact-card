@@ -257,7 +257,7 @@ const ProfileCard = ({ data }: { data: IContactCard }) => {
             <div className="space-y-3 z-20 relative">
               <p className="text-md text-center md:text-left text-white">Office Location</p>
               <iframe
-                src={`https://www.google.com/maps/embed?pb=!1m18...`}
+                src={`https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2727.3206806782837!2d55.3006596!3d25.157698999999997!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f69270f5612c3%3A0x2d7e43041843e7d8!2sMeydan%20Free%20Zone!5e1!3m2!1sen!2sin!4v1748966680913!5m2!1sen!2sin`}
                 className="w-full h-[150px] md:h-[200px] md:w-[90%] rounded-2xl"
                 loading="lazy"
                 allowFullScreen
